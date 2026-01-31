@@ -1,4 +1,4 @@
-# Lecture Notes: Data Encodings in Machine Learning
+# Data Encodings in Machine Learning
 
 ---
 
