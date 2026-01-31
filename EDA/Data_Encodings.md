@@ -1,8 +1,8 @@
-# Lecture Notes: Data Encodings in Machine Learning 🔧🧠
+# Lecture Notes: Data Encodings in Machine Learning
 
 ---
 
-## Introduction to Encodings 💡
+## Introduction to Encodings 
 
 - **Definition:** Encoding converts categorical or text data into numerical form so machine learning models can process it.
 - **Why needed:** Most ML models (e.g., linear regression, neural networks) require numeric inputs.
@@ -10,7 +10,7 @@
 
 ---
 
-## Label Encoding 🔢
+## Label Encoding 
 
 - **Concept:** Assign a unique integer to each category.
 
@@ -28,7 +28,7 @@
 
 ---
 
-## One‑Hot Encoding ✅
+## One‑Hot Encoding 
 
 - **Concept:** Convert each category into a separate binary (0/1) column.
 
@@ -46,7 +46,7 @@
 
 ---
 
-## Ordinal Encoding 🔼
+## Ordinal Encoding 
 
 - **Concept:** Assign integers based on an inherent order.
 
@@ -77,7 +77,7 @@
 
 ---
 
-## Target / Mean Encoding 🎯
+## Target / Mean Encoding 
 
 - **Concept:** Replace category with the mean (or statistic) of the target variable for that category.
 
@@ -94,7 +94,7 @@
 
 ---
 
-## Choosing the Right Encoding — Quick Reference 📋
+## Choosing the Right Encoding — Quick Reference 
 
 | Encoding Type | Advantages                   | Disadvantages                | Practical Tips                                              |
 | ------------- | ---------------------------- | ---------------------------- | ----------------------------------------------------------- |
@@ -106,7 +106,7 @@
 
 ---
 
-## Summary ✨
+## Summary 
 
 - Encoding transforms categorical/text data into numeric form.
 - Choose encoding based on: number of categories, whether order matters, and risk of leakage.
