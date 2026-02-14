@@ -676,5 +676,6 @@ Given the following mini dataset with 5 samples, feature X and target y:
 - Molnar, C. (2020). Interpretable Machine Learning — https://christophmolnar.com/books/interpretable-ml/
 - Cost-Complexity Pruning: https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html#sklearn.tree.DecisionTreeClassifier.cost_complexity_pruning_path
 - MLU-Explain: Decision Trees Interactive Tutorial — https://mlu-explain.github.io/decision-tree/
+- A Visual Introduction: Decision Trees Interactive Tutorial — https://narrative-flow.github.io/exploratory-study-2/
 
 ---
