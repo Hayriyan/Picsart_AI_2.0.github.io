@@ -19,24 +19,61 @@ The core idea: transform the original feature space by creating polynomial terms
 - Cubic (degree 3): $\hat{y} = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^3$
 - General degree $d$: $\hat{y} = \sum_{k=0}^{d} \beta_k x^k$
 
-## When Polynomial Regression Is Appropriate
+# When Polynomial Regression Is Appropriate
 
-**Use polynomial regression when:**
+Use polynomial regression when:
 
-- **Visual exploration suggests curved relationships**: scatter plots show clear non-linear patterns (U-shapes, S-curves, etc.).
-- **Interpretability matters**: you need an explicit mathematical formula relating inputs to outputs.
-- **Low-dimensional data (1-5 features)**: polynomial terms explode combinatorially with feature count (curse of dimensionality).
-- **Extrapolation beyond training range is not required**: polynomial behavior can be extreme outside observed data.
-- **Smooth, differentiable relationships**: the underlying process follows a smooth, continuous curve.
-- **Physics or domain knowledge suggests polynomial form**: e.g., $v = v_0 + gt + \frac{1}{2}gt^2$ (position under gravity).
+### 1. The data shows a curved pattern
 
-**When NOT to use polynomial regression:**
+Scatter plots show clear non-linear shapes such as **U-shapes** or **S-curves**, not a straight line.
 
-- **High-dimensional data**: number of polynomial features grows exponentially. For $d$ features and degree $p$, the number of polynomial terms is $\mathcal{O}(d^p)$, leading to overfitting and multicollinearity.
-- **Prediction requires extrapolation**: polynomial fits can oscillate wildly outside the training domain (Runge's phenomenon).
-- **Non-smooth data patterns**: abrupt changes, discontinuities, or locally different behavior; use piecewise methods or tree-based models instead.
-- **Extreme overfitting is a concern and you lack sufficient regularization**: higher-degree polynomials fit noise rather than signal.
-- **Computational efficiency critical**: consider simpler linear models or tree-based alternatives.
+### 2. You need an interpretable formula
+
+The model provides an **explicit mathematical equation** connecting inputs and outputs.
+
+### 3. The dataset has few features
+
+Polynomial features grow quickly as the number of variables increases, so this method works best with **about 1–5 features**.
+
+### 4. Predictions stay within the observed range
+
+Polynomials can behave **unpredictably outside the training data**, so they are best for **interpolation**, not extrapolation.
+
+### 5. Domain knowledge suggests a polynomial relationship
+
+Many physical laws follow polynomial forms. For example, motion under constant acceleration:
+
+$$
+s = s_0 + v_0 t + \frac{1}{2} a t^2
+$$
+
+---
+
+# When NOT to Use Polynomial Regression
+
+---
+
+Avoid polynomial regression when:
+
+### 1. There are many features
+
+The number of polynomial terms grows very fast, which can cause **overfitting** and **unstable models**.
+
+### 2. You must predict far outside the training data
+
+Polynomials can **explode or oscillate** beyond the observed range.
+
+### 3. The data has sharp changes or discontinuities
+
+Polynomial models assume smooth curves, so they struggle with **sudden jumps** or **piecewise behavior**.
+
+### 4. Overfitting is likely
+
+High-degree polynomials may fit **noise instead of the true pattern**.
+
+### 5. Simpler or more scalable models are needed
+
+If **computational efficiency** is important, **linear models** or **tree-based methods** may be better.
 
 ## Mathematical Formulation
 
@@ -433,13 +470,7 @@ Actual value: $y = 320$. Residual: $r = 320 - 587.5 = -267.5$ (large residual; m
 Predict price for $x = 3.2$ (outside training range, close to max):
 
 $$
-\begin{aligned}
-\hat{y} 
-&= -50 + 30(3.2) + 90(3.2)^2 \\
-&= -50 + 96 + 90(10.24) \\
-&= -50 + 96 + 921.6 \\
-&= 967.6 \quad \text{(in \$1000s)}
-\end{aligned}
+\hat{y} = -50 + 30(3.2) + 90(3.2)^2 = -50 + 96 + 90(10.24) = -50 + 96 + 921.6 = 967.6 \quad (\text{in \$1000s})
 $$
 
 ---
@@ -554,66 +585,103 @@ This ensures $\mathbf{X}^T \mathbf{X}$ is well-conditioned and regularization is
 
 ```python
 import numpy as np
-from sklearn.preprocessing import PolynomialFeatures, StandardScaler
-from sklearn.linear_model import LinearRegression, Ridge
-from sklearn.model_selection import cross_val_score, train_test_split
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import PolynomialFeatures, StandardScaler
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split, cross_val_score
 
-# Sample data
+# ─── Data ────────────────────────────────────────────────────────────────
 X = np.array([1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5]).reshape(-1, 1)
 y = np.array([100, 150, 230, 320, 430, 550, 680, 820, 980, 1150])
 
-# Split data
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# ─── Split ───────────────────────────────────────────────────────────────
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
 
-# Standardize features
-scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_test_scaled = scaler.transform(X_test)
-
-# Create polynomial features (degree 2)
-poly = PolynomialFeatures(degree=2, include_bias=True)
-X_train_poly = poly.fit_transform(X_train_scaled)
-X_test_poly = poly.transform(X_test_scaled)
-
-# Fit linear regression on polynomial features
-model = LinearRegression()
-model.fit(X_train_poly, y_train)
-
-# Evaluate
-train_score = model.score(X_train_poly, y_train)
-test_score = model.score(X_test_poly, y_test)
-print(f"Train R²: {train_score:.4f}, Test R²: {test_score:.4f}")
-
-# Cross-validation for degree selection
+# ─── Best degree selection with cross-validation ─────────────────────────
 degrees = range(1, 6)
-cv_scores = []
-for d in degrees:
-    poly_d = PolynomialFeatures(degree=d)
-    X_poly = poly_d.fit_transform(X_train_scaled)
-    model_d = LinearRegression()
-    scores = cross_val_score(model_d, X_poly, y_train, cv=5, scoring='r2')
-    cv_scores.append(scores.mean())
-    print(f"Degree {d}: CV R² = {scores.mean():.4f} (±{scores.std():.4f})")
+cv_means = []
+cv_stds = []
 
-# Plot results
-plt.figure(figsize=(10, 5))
+print("Cross-validation results:")
+for d in degrees:
+    poly_d = PolynomialFeatures(degree=d, include_bias=False)
+    scaler_d = StandardScaler()
+    
+    X_poly = poly_d.fit_transform(X_train)
+    X_scaled = scaler_d.fit_transform(X_poly)
+    
+    scores = cross_val_score(
+        LinearRegression(),
+        X_scaled,
+        y_train,
+        cv=3,
+        scoring='r2'
+    )
+    mean_r2 = scores.mean()
+    std_r2 = scores.std()
+    cv_means.append(mean_r2)
+    cv_stds.append(std_r2)
+    print(f"Degree {d:2d}: CV R² = {mean_r2:.4f} (±{std_r2:.4f})")
+
+# Choose the best degree (highest mean CV R²)
+best_degree = degrees[np.argmax(cv_means)]
+print(f"\nSelected best degree (by CV): {best_degree}\n")
+
+# ─── Final model with best degree ────────────────────────────────────────
+poly = PolynomialFeatures(degree=best_degree, include_bias=False)
+scaler = StandardScaler()
+
+X_train_poly = poly.fit_transform(X_train)
+X_train_scaled = scaler.fit_transform(X_train_poly)
+
+X_test_poly = poly.transform(X_test)
+X_test_scaled = scaler.transform(X_test_poly)
+
+model = LinearRegression()
+model.fit(X_train_scaled, y_train)
+
+train_r2 = model.score(X_train_scaled, y_train)
+test_r2  = model.score(X_test_scaled, y_test)
+
+print(f"Final model (degree {best_degree})")
+print(f"Train R²: {train_r2:.4f}")
+print(f"Test  R²: {test_r2:.4f}")
+
+# ─── Plot 1: CV scores ───────────────────────────────────────────────────
+plt.figure(figsize=(12, 5))
+
 plt.subplot(1, 2, 1)
-plt.plot(degrees, cv_scores, 'o-', label='CV Score (R²)')
+plt.errorbar(degrees, cv_means, yerr=cv_stds, fmt='o-', capsize=5, label='3-fold CV R²')
+plt.axvline(best_degree, color='red', linestyle='--', alpha=0.7, label=f'Best degree = {best_degree}')
 plt.xlabel('Polynomial Degree')
 plt.ylabel('Cross-Validation R²')
+plt.title('Model Complexity vs Performance')
+plt.grid(True, alpha=0.3)
 plt.legend()
-plt.grid()
 
-# Predictions on test set
-y_pred = model.predict(X_test_poly)
+# ─── Plot 2: Data + final fit ────────────────────────────────────────────
 plt.subplot(1, 2, 2)
-plt.scatter(X_test, y_test, color='blue', label='Actual')
-plt.scatter(X_test, y_pred, color='red', label='Predicted', marker='x')
-plt.xlabel('Feature (scaled)')
-plt.ylabel('Target')
+
+plt.scatter(X, y, color='blue', s=80, label='All data', alpha=0.6)
+plt.scatter(X_train, y_train, color='green', s=100, edgecolor='black', label='Train')
+plt.scatter(X_test, y_test, color='orange', s=100, edgecolor='black', label='Test')
+
+# Smooth curve using the final (best) transformers
+X_curve = np.linspace(X.min(), X.max(), 300).reshape(-1, 1)
+X_curve_poly = poly.transform(X_curve)
+X_curve_scaled = scaler.transform(X_curve_poly)
+y_curve = model.predict(X_curve_scaled)
+
+plt.plot(X_curve, y_curve, color='red', linewidth=2.5, label=f'Degree {best_degree} fit')
+
+plt.xlabel('X')
+plt.ylabel('y')
+plt.title('Data and Polynomial Fit')
+plt.grid(True, alpha=0.3)
 plt.legend()
-plt.grid()
+
 plt.tight_layout()
 plt.show()
 ```
@@ -689,20 +757,5 @@ y_pred = kr.predict(X_test)
 
 Polynomial regression bridges the explainability of linear models with the flexibility to capture non-linear relationships, making it a valuable tool in any machine learning engineer's toolkit—when used judiciously.
 
----
 
-## Note on GitHub Rendering
 
-This document uses LaTeX math notation (`$...$` for inline, `$$...$$` for display equations).
-
-**GitHub Support:** GitHub natively renders LaTeX in markdown files. All mathematical equations in this guide will display correctly when viewed on GitHub.com.
-
-**Local Viewing:**
-
-- **VS Code:** Install the "Markdown Preview Enhanced" or "Math" extension for preview rendering
-- **Raw Text:** If viewing raw markdown, equations will appear as LaTeX source code but are correct
-
-**Browsers:**
-
-- **Chrome/Firefox:** GitHub renders math server-side; no additional plugins needed
-- **Safari:** Should work; if not, try refreshing the page
