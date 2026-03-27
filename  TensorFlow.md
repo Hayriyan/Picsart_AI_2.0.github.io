@@ -1,4 +1,4 @@
-## ✅ Introduction to TensorFlow + Keras (for SKLearn/ML students)
+## Introduction to TensorFlow + Keras (for SKLearn/ML students)
 
 Great news: this is a super relevant topic and your baseline (sklearn/ML models) is perfect.  
 I’ll give you a clear, structured lecture in English with theory + practical code concepts and GPU/TPU optimization, including logistic regression in TensorFlow for image classification.
