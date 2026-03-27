@@ -115,6 +115,7 @@ I’ll give you a clear, structured lecture in English with theory + practical c
 ## 6. Example: MNIST/CIFAR-like image classification with logistic regression
 
 ### 6.1 Data prep
+
 - use tf.keras datasets: `mnist` or `cifar10`
   - Add text: these datasets are built-in and good for teaching. `mnist` has 28x28 grayscale digits; `cifar10` has 32x32 RGB objects.
 - normalize pixel values `x/255.0`
@@ -123,10 +124,12 @@ I’ll give you a clear, structured lecture in English with theory + practical c
   - Add text: flatten converts each image to a vector so the dense layer applies a linear transformation across all pixels.
 
 ### 6.2 Model
+
 - `tf.keras.Sequential([Flatten, Dense(num_classes, activation='softmax')])`
   - Add text: this is effectively softmax regression (multiclass logistic regression). It has no hidden layers, so it learns only linear decision boundaries.
 
 ### 6.3 Compile
+
 - `optimizer=tf.keras.optimizers.Adam(learning_rate=0.001)`
   - Add text: Adam is popular because it adapts the learning rate per parameter, which usually works well out-of-box.
 - `loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False)` (since softmax output)
@@ -135,10 +138,12 @@ I’ll give you a clear, structured lecture in English with theory + practical c
   - Add text: accuracy is easy to interpret for classification.
 
 ### 6.4 Fit
+
 - use `model.fit(train_ds, validation_data=val_ds, epochs=5)`
   - Add text: start with 5 epochs and monitor whether loss decreases; more epochs can improve final accuracy.
 
 ### 6.5 Evaluate and sample predict
+
 - `model.evaluate(test_ds)`
   - Add text: evaluate returns loss and accuracy; use this as your final model report.
 - `model.predict(sample_images)`
@@ -205,17 +210,20 @@ print("preds", preds, "true", y_test[:5])
 ## 9. GPU / TPU optimization (key principles)
 
 ### 9.1 GPU:
+
 - install CUDA + cuDNN matching TF version
   - Add text: mismatch between TensorFlow and CUDA versions is a common source of failure.
 - verify with:
   - `tf.config.list_physical_devices('GPU')`
     - Add text: if this returns an empty list, GPU is not available in your environment.
 - set memory growth:
+
 ```python
 gpus = tf.config.list_physical_devices('GPU')
 for g in gpus: tf.config.experimental.set_memory_growth(g, True)
 ```
-  - Add text: this avoids TensorFlow pre-allocating all GPU memory and helps run side-by-side processes.
+
+- Add text: this avoids TensorFlow pre-allocating all GPU memory and helps run side-by-side processes.
 - use accelerated data pipeline:
   - `ds.cache().prefetch(tf.data.AUTOTUNE)`
   - `interleave`, `map(..., num_parallel_calls=tf.data.AUTOTUNE)`
@@ -223,6 +231,7 @@ for g in gpus: tf.config.experimental.set_memory_growth(g, True)
   - Add text: evaluate GPU memory and adjust batch size until utilization is strong but no OOM.
 
 ### 9.2 TPU (Cloud or Colab TPU):
+
 - connect:
   - `resolver = tf.distribute.cluster_resolver.TPUClusterResolver()`
   - `tf.config.experimental_connect_to_cluster(resolver)`
@@ -235,6 +244,7 @@ for g in gpus: tf.config.experimental.set_memory_growth(g, True)
 - Add text: TPU uses a global batch size across replicas, so adjust accordingly and keep drop_remainder=True for static shape.
 
 ### 9.3 Loss scaling + mixed precision
+
 - enable mixed precision:
   - `tf.keras.mixed_precision.set_global_policy('mixed_float16')`
 - use compatible optimizers (`Adam`, etc) -> TF handles loss scaling automatically
@@ -273,21 +283,8 @@ for g in gpus: tf.config.experimental.set_memory_growth(g, True)
 - Should I include a short comparison chart: sklearn vs TF/Keras on logistic regression + images?
   - Add text: a chart helps visual learners quickly spot strengths/limitations.
 
----
-
-## 12. Closing
-
-- Wrap with a “next step” assignment:
-  - convert logistic model to small CNN,
-  - compare training curves
-  - try data augmentation with `ImageDataGenerator` or `tf.image`
-
-- Add text: assignments reinforce learning by applying extensions and observing concrete benefits.
+- Additional resources:
+  - URL: https://www.tensorflow.org/tfx/model_analysis/metrics#multi-classmulti-label_classification_metrics
+  - Add text: this page explains multi-class/multi-label classification metrics in TensorFlow Model Analysis (TFMA), useful for real-world ML model evaluation.
 
 ---
-
-## 💡 Extra notes for you
-
-- In lecture notes say explicitly: “tensorflow 2.x uses eager by default.”
-- Emphasize the same logistic math: `y = softmax(W x + b)`, i.e., no new algorithm, just new framework.
-- Keep code short and copy/paste friendly.
