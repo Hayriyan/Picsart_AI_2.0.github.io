@@ -151,8 +151,7 @@ I’ll give you a clear, structured lecture in English with theory + practical c
 
 ---
 
-## 7. Code snippet (complete, concise)
-
+## 7. Code snippet (complete, concise) [Colab Link](https://colab.research.google.com/drive/1iluaZnkzsRO94_5vjsyGvTdpvD-hu9Tz?usp=sharing)
 ```python
 import tensorflow as tf
 
@@ -192,18 +191,6 @@ print("preds", preds, "true", y_test[:5])
 ```
 
 - Add text: this walk-through is intentionally linear and replicates the sklearn pattern: load, preprocess, define model, train, evaluate, predict.
-
----
-
-## 8. Extension path: from logistic regression to CNN
-
-- Replace flatten + dense with conv blocks:
-  - `Conv2D(32,3,relu), MaxPool2D, Flatten, Dense(...)`
-  - Add text: with Conv2D, the network learns spatial filters instead of treating pixels independently.
-- Explain why this is better for images (feature locality, translation invariance)
-  - Add text: convolution reuses the same kernel across locations and focuses on local patterns; pooling reduces size and introduces robustness to shifts.
-- Keep same `compile` and `fit` signatures
-  - Add text: once the model is built, the training loop stays identical, which is a strong code-reuse point for students.
 
 ---
 
