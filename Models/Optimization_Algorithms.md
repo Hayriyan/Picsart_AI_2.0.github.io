@@ -838,6 +838,92 @@ optimizer = RMSProp(learning_rate=0.001, decay=0.9)
 
 ---
 
+## (Optional) Recommended Textbooks and Resources 
+
+### "Convex Optimization" by Stephen Boyd and Lieven Vandenberghe
+
+**Stanford University** | [Available Online (Free PDF)](https://web.stanford.edu/~boyd/cvxbook/)
+
+This comprehensive textbook is **highly recommended** for anyone serious about understanding optimization in machine learning and deep learning. While it focuses on convex optimization (not directly applicable to non-convex neural network training), the theoretical foundations and intuitions are invaluable.
+
+#### Key Chapters for ML/DL Practitioners (Focus Areas)
+
+**Chapter 2: Convex Sets**
+
+- Understand the geometry of optimization problems
+- Learn about convex sets and their properties
+- Foundation for recognizing convex vs. non-convex problems
+- Applications to feasible regions in constrained optimization
+
+**Chapter 3: Convex Functions**
+
+- Comprehensive coverage of convex and concave functions
+- Essential properties: first-order and second-order characterization
+- Understanding function behavior and convergence guarantees
+- Key insight: Why convex problems are "easy" to optimize
+
+**Chapter 4: Convex Optimization Problems**
+
+- Standard forms of optimization problems
+- Linear and quadratic programming
+- Conic and geometric programming
+- Understanding problem structure affects solution methods
+- Practical problem formulations
+
+**Chapter 5: Duality**
+
+- Lagrange duality and KKT conditions
+- **Most important for understanding optimization deeply**
+- Foundation for constrained optimization
+- Weak and strong duality
+- Dual decomposition methods
+- Critical for understanding why certain algorithms work
+
+#### Why This Book is Useful for Deep Learning
+
+1. **Theoretical Foundation**: While neural networks are non-convex, understanding convex optimization provides invaluable intuitions about how gradients, step sizes, and convergence work
+
+2. **Convergence Analysis**: Many proofs and convergence guarantees for algorithms like gradient descent, SGD (when applied to convex problems) are directly from these chapters
+
+3. **Problem Formulation**: Learn how to frame optimization problems, which is useful when designing loss functions and constraints
+
+4. **Lagrangian Methods**: Understanding duality is crucial for constrained optimization and regularization techniques
+
+5. **Second-Order Methods**: Background for Newton's method and quasi-Newton methods used in optimization
+
+6. **Practical Algorithms**: Many optimization algorithms used today have roots in convex optimization theory
+
+#### How to Approach
+
+**If you have limited time:**
+
+- Focus on Chapters 2, 3, 4, and 5
+- Understand the intuitions rather than all proofs
+- Chapter 5 on duality is particularly enlightening
+
+**For deep learning specifically:**
+
+- Chapter 3: Convex functions → understand function behavior
+- Chapter 4: Problem formulation → understand loss functions
+- Chapter 5: Duality → understand regularization and constraints
+
+**Complementary reading:**
+
+- Section 9.1-9.3: Gradient descent and convergence analysis
+- This connects convex theory to the algorithms we use on neural networks
+
+#### Key Takeaways
+
+While you can build neural networks without reading this book, understanding the foundations from Boyd's work will:
+
+- Deepen your intuition about why certain optimizers work
+- Help you design better loss functions and constraints
+- Enable you to understand convergence behavior
+- Provide mathematical rigor to complement practical deep learning
+- Aid in debugging optimization issues in your own models
+
+---
+
 ## References
 
 1. Ruder, S. (2016). An overview of gradient descent optimization algorithms. arXiv preprint arXiv:1609.04747.
@@ -846,12 +932,15 @@ optimizer = RMSProp(learning_rate=0.001, decay=0.9)
 2. Dive into Deep Learning - Chapter 12: Optimization Algorithms
    - Source: https://d2l.ai/chapter_optimization/index.html
 
-3. Key Papers:
+3. **Boyd, S., & Vandenberghe, L. (2004). Convex Optimization.** Cambridge University Press.
+   - **Free online version:** https://web.stanford.edu/~boyd/cvxbook/
+   - **Recommended chapters for deep learning:** 2 (Convex Sets), 3 (Convex Functions), 4 (Convex Optimization Problems), 5 (Duality)
+   - **Why it matters:** Provides theoretical foundation for understanding gradient-based optimization and convergence analysis
+
+4. Key Papers:
    - [Kingma, D. P., & Ba, J. L. (2015). Adam: A Method for Stochastic Optimization. ICLR.](https://arxiv.org/pdf/1412.6980)
    - [Zeiler, M. D. (2012). ADADELTA: An Adaptive Learning Rate Method. arXiv:1212.5701.](https://arxiv.org/pdf/1212.5701)
    - [Duchi, J., Hazan, E., & Singer, Y. (2011). Adaptive Subgradient Methods for Online Learning. JMLR.](https://www.jmlr.org/papers/volume12/duchi11a/duchi11a.pdf)
    - [Tieleman, T., & Hinton, G. (2012). RMSProp: Divide the gradient by a running average. [Coursera Lecture]](https://www.scirp.org/pdf/ojop2024133_12730372.pdf)
 
 ---
-
-
