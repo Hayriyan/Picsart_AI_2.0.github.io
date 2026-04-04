@@ -42,6 +42,13 @@ Conceptual documentation on key ML algorithms:
 - Optimization Algorithms
 - ML Evaluation Metrics
 
+**📚 Stanford CS229 Lecture Notes:**
+
+- [GLM.pdf](Models/GLM.pdf) - Generalized Linear Models (from Stanford CS229)
+- [Linear_Regression.pdf](Models/Linear_Regression.pdf) - Linear Regression (from Stanford CS229)
+
+_These resources are adapted from Andrew Ng's Stanford CS229 course lectures._
+
 ### 📁 [NumPy/](NumPy/) - Python Numerical Computing
 
 Interactive Jupyter Notebooks for NumPy mastery:
@@ -238,6 +245,22 @@ Refer to [DB/SQLITE3_GUIDE.md](DB/SQLITE3_GUIDE.md) for detailed SQLite troubles
 ## 📄 License
 
 This repository is for educational purposes. Please check individual files for specific license information.
+
+---
+
+## 📚 Acknowledgments & Attribution
+
+This repository incorporates educational materials from various sources:
+
+- **Stanford CS229 - Machine Learning Course** (Andrew Ng)
+  - Generalized Linear Models (GLM.pdf) ✓
+  - Linear Regression (Linear_Regression.pdf) ✓
+  - [Course Website](https://cs229.stanford.edu/)
+
+- **Original Content**: Custom lectures, tutorials, and exercises created for this program
+- **Datasets**: SpaceX data sourced from public APIs
+
+> **Attribution Note**: The GLM.pdf and Linear_Regression.pdf documents are educational materials derived from Stanford University's CS229 course. These are used here for learning purposes in accordance with their educational license.
 
 ---
 
