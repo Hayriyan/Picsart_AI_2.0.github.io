@@ -235,21 +235,6 @@ Refer to [DB/SQLITE3_GUIDE.md](DB/SQLITE3_GUIDE.md) for detailed SQLite troubles
 - Data cleaning & preprocessing
 - API integration
 
-## ⚙️ System Requirements
-
-- **OS**: macOS, Linux, or Windows
-- **Python**: 3.14.0+
-- **RAM**: 4GB minimum (8GB recommended)
-- **Storage**: ~500MB for all datasets and notebooks
-
-## 📞 Contact & Support
-
-For questions or issues:
-
-1. Check relevant documentation files
-2. Review notebook examples
-3. Consult the task descriptions in [Exam/](Exam/)
-
 ## 📄 License
 
 This repository is for educational purposes. Please check individual files for specific license information.
