@@ -192,43 +192,6 @@ conn = sqlite3.connect('DB/SpaceX-ETL/spacex.db')
 cursor = conn.cursor()
 ```
 
-## 🤝 Contributing
-
-This is an educational repository. To contribute:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/YourFeature`)
-3. Commit your changes (`git commit -m 'Add educational content'`)
-4. Push to the branch (`git push origin feature/YourFeature`)
-5. Open a pull request
-
-## 📋 File Organization Tips
-
-- **Practice files**: Save solutions in separate branches or folders
-- **Experiment notebooks**: Use numbered versions (e.g., `analysis_v1.ipynb`, `analysis_v2.ipynb`)
-- **Data processing**: Keep raw data in `Raw/` and processed in `Procesed/`
-
-## 🆘 Troubleshooting
-
-### Import Errors
-
-```bash
-# Verify all packages are installed
-pip list
-# Reinstall dependencies
-pip install -r DB/SpaceX-ETL/requirments.txt --force-reinstall
-```
-
-### Jupyter Not Found
-
-```bash
-pip install jupyter
-```
-
-### Database Issues
-
-Refer to [DB/SQLITE3_GUIDE.md](DB/SQLITE3_GUIDE.md) for detailed SQLite troubleshooting.
-
 ## 📚 Key Topics Covered
 
 - Python fundamentals & NumPy
