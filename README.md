@@ -1,4 +1,4 @@
-# Picsart AI 2.0 - Educational Repository
+# url(https://hayriyan.github.io/Picsart_AI_2.0/)[Picsart AI 2.0 - Educational Repository]
 
 A comprehensive learning resource for students covering **Machine Learning**, **Data Engineering**, **Data Analysis**, and **Python Programming**. This repository contains lecture notes, hands-on exercises, real-world projects, and evaluation tasks.
 
