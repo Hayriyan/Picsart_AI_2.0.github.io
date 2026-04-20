@@ -1,0 +1,377 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#090c10;--s1:#111520;--s2:#181d28;--s3:#1e2435;
+  --b:#252d40;--b2:#2e3850;
+  --p1:#4f8ef7;--p2:#7c6af0;--p3:#3ecfb2;--p4:#f0a04b;
+  --tx:#dde2f0;--mu:#6b7896;--mu2:#3a4560;
+}
+body{background:var(--bg);color:var(--tx);font-family:'Outfit',sans-serif;font-size:14px;line-height:1.6;min-height:100vh}
+.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+
+/* Sidebar */
+.sidebar{background:var(--s1);border-right:1px solid var(--b);padding:24px 0;display:flex;flex-direction:column;gap:0}
+.sidebar-top{padding:0 20px 20px;border-bottom:1px solid var(--b);margin-bottom:12px}
+.logo{font-family:'DM Serif Display',serif;font-size:18px;color:#fff;line-height:1.2}
+.logo em{color:var(--p1);font-style:italic}
+.logo-sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--mu);letter-spacing:.12em;margin-top:4px}
+.nav-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;color:var(--mu2);padding:8px 20px 6px;text-transform:uppercase}
+.phase-btn{display:flex;align-items:center;gap:10px;padding:10px 20px;cursor:pointer;border:none;background:none;color:var(--mu);font-family:'Outfit',sans-serif;font-size:13px;width:100%;text-align:left;transition:all .2s;border-left:2px solid transparent;position:relative}
+.phase-btn:hover{background:var(--s2);color:var(--tx)}
+.phase-btn.active{background:var(--s2);color:#fff;border-left-color:var(--phase-c)}
+.phase-dot{width:8px;height:8px;border-radius:50%;background:var(--phase-c);flex-shrink:0}
+.phase-btn .check{margin-left:auto;font-size:10px;opacity:0;color:var(--phase-c);transition:opacity .3s}
+.phase-btn.done .check{opacity:1}
+.sidebar-bottom{margin-top:auto;padding:16px 20px;border-top:1px solid var(--b)}
+.progress-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--mu);letter-spacing:.1em;margin-bottom:8px}
+.prog-bar{height:4px;background:var(--b);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--p1),var(--p2));border-radius:2px;transition:width .5s ease}
+.prog-pct{font-size:11px;color:var(--mu);margin-top:4px}
+
+/* Main */
+.main{overflow-y:auto;padding:32px 36px}
+.phase-header{margin-bottom:28px}
+.phase-tag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--phase-col);margin-bottom:8px}
+.phase-title{font-family:'DM Serif Display',serif;font-size:36px;color:#fff;line-height:1.15;margin-bottom:12px}
+.phase-title em{color:var(--phase-col);font-style:italic}
+.phase-meta{display:flex;flex-wrap:wrap;gap:8px}
+.pill{padding:4px 12px;border-radius:20px;font-size:12px;border:1px solid var(--b2);color:var(--mu);background:var(--s2)}
+
+/* Stats row */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:28px}
+.stat-card{background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:14px 16px}
+.stat-n{font-size:22px;font-weight:500;color:#fff;line-height:1}
+.stat-l{font-size:11px;color:var(--mu);margin-top:4px}
+
+/* Sections */
+.section{margin-bottom:24px}
+.section-head{display:flex;align-items:center;justify-content:space-between;padding:0 0 10px;border-bottom:1px solid var(--b);margin-bottom:12px;cursor:pointer;user-select:none}
+.section-name{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu)}
+.section-toggle{font-size:11px;color:var(--mu);transition:transform .2s}
+.section-toggle.open{transform:rotate(180deg)}
+.topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px}
+.topic{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;border-radius:7px;background:var(--s2);border:1px solid var(--b);cursor:pointer;transition:all .2s;user-select:none}
+.topic:hover{border-color:var(--b2);background:var(--s3)}
+.topic.checked{border-color:var(--phase-col-a);background:var(--phase-col-b)}
+.topic-cb{width:14px;height:14px;border-radius:3px;border:1.5px solid var(--mu2);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.topic.checked .topic-cb{background:var(--phase-col);border-color:var(--phase-col)}
+.topic-check{font-size:9px;color:#fff;display:none}
+.topic.checked .topic-check{display:block}
+.topic-text{font-size:12.5px;color:var(--tx);line-height:1.4}
+.topic.checked .topic-text{color:var(--mu)}
+
+/* Exam block */
+.exam-card{background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:18px 20px;margin-top:8px}
+.exam-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.exam-icon{width:32px;height:32px;border-radius:8px;background:var(--phase-col-b);display:flex;align-items:center;justify-content:center}
+.exam-icon svg{width:14px;height:14px}
+.exam-title{font-size:14px;font-weight:500;color:#fff}
+.exam-type{font-size:11px;color:var(--mu);margin-top:1px}
+.score-chips{display:flex;flex-wrap:wrap;gap:6px}
+.score-chip{padding:4px 10px;border-radius:4px;font-size:11px;font-family:'DM Mono',monospace;color:var(--phase-col);background:var(--phase-col-b);border:1px solid var(--phase-col-a)}
+
+/* Mid exam */
+.mid-exam{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:7px;background:var(--s3);border:1px dashed var(--b2);margin:14px 0;font-size:12px;color:var(--mu)}
+.mid-exam-dot{width:6px;height:6px;border-radius:50%;background:var(--p2);flex-shrink:0}
+
+/* Panel hidden */
+.panel{display:none}.panel.active{display:block}
+
+/* Completion banner */
+.done-banner{background:var(--s2);border:1px solid #1a3a20;border-radius:10px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:12px;font-size:13px;color:#3ecfb2}
+.done-banner-icon{width:20px;height:20px;border-radius:50%;background:#0f3020;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;color:#3ecfb2}
+</style>
+
+<div class="app">
+  <nav class="sidebar">
+    <div class="sidebar-top">
+      <div class="logo">ML / DL<br><em>Program</em></div>
+      <div class="logo-sub">15 months · 4 phases</div>
+    </div>
+    <div class="nav-label">Phases</div>
+    <button class="phase-btn active" style="--phase-c:var(--p1)" onclick="showPanel(0)" id="nb0">
+      <span class="phase-dot"></span>Basic CS &amp; Python<span class="check">✓</span>
+    </button>
+    <button class="phase-btn" style="--phase-c:var(--p2)" onclick="showPanel(1)" id="nb1">
+      <span class="phase-dot"></span>Advanced Python &amp; SQL<span class="check">✓</span>
+    </button>
+    <button class="phase-btn" style="--phase-c:var(--p3)" onclick="showPanel(2)" id="nb2">
+      <span class="phase-dot"></span>Machine Learning<span class="check">✓</span>
+    </button>
+    <button class="phase-btn" style="--phase-c:var(--p4)" onclick="showPanel(3)" id="nb3">
+      <span class="phase-dot"></span>Deep Learning<span class="check">✓</span>
+    </button>
+    <div class="sidebar-bottom">
+      <div class="progress-label">Overall progress</div>
+      <div class="prog-bar"><div class="prog-fill" id="gbar" style="width:0%"></div></div>
+      <div class="prog-pct" id="gpct">0 / 0 topics</div>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <!-- Panel 0: Phase 1 -->
+    <div class="panel active" id="p0" style="--phase-col:var(--p1);--phase-col-a:rgba(79,142,247,.3);--phase-col-b:rgba(79,142,247,.08)">
+      <div class="phase-header">
+        <div class="phase-tag">Phase 1</div>
+        <h1 class="phase-title">Basic CS &amp;<br><em>Core Python</em></h1>
+        <div class="phase-meta">
+          <span class="pill">Foundations</span>
+          <span class="pill">~3 months</span>
+          <span class="pill">Theory + Coding exam</span>
+        </div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-n" id="s0-done">0</div><div class="stat-l">Topics completed</div></div>
+        <div class="stat-card"><div class="stat-n" id="s0-total">0</div><div class="stat-l">Total topics</div></div>
+        <div class="stat-card"><div class="stat-n" id="s0-pct">0%</div><div class="stat-l">Phase progress</div></div>
+      </div>
+      <div id="done0" class="done-banner" style="display:none"><div class="done-banner-icon">✓</div>Phase complete — ready for the exam!</div>
+      <div class="section">
+        <div class="section-head" onclick="toggleSec(this)">
+          <span class="section-name">Computer science fundamentals</span>
+          <span class="section-toggle open">▾</span>
+        </div>
+        <div class="topics">
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Introduction — AI, ML, DL &amp; CS</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Computer Architecture (language, bit, byte)</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">OS Fundamentals</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Data Representation (Int &amp; IEEE-754 Float)</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">CPU &amp; Memory Architecture</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">GPU &amp; Memory Architecture</div></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-head" onclick="toggleSec(this)">
+          <span class="section-name">Python core</span>
+          <span class="section-toggle open">▾</span>
+        </div>
+        <div class="topics">
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Numeric &amp; String Types</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Sequence Types: Lists &amp; Tuples</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Mapping &amp; Set Types</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Python Statements (if, for, while)</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Function Basics &amp; Return Types</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Scope &amp; LEGB Rules</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Argument Matching &amp; Closures</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Recursion &amp; Higher-Order Functions</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Iterables, Iterators &amp; Generators</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Files &amp; Modules</div></div>
+        </div>
+      </div>
+      <div class="exam-card">
+        <div class="exam-top">
+          <div class="exam-icon"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="12" height="14" rx="2" stroke="var(--p1)" stroke-width="1.2"/><line x1="5" y1="5" x2="11" y2="5" stroke="var(--p1)" stroke-width="1"/><line x1="5" y1="8" x2="11" y2="8" stroke="var(--p1)" stroke-width="1"/><line x1="5" y1="11" x2="8" y2="11" stroke="var(--p1)" stroke-width="1"/></svg></div>
+          <div><div class="exam-title">Phase exam — Theory &amp; Coding</div><div class="exam-type">Written theory test + coding challenge</div></div>
+        </div>
+        <div class="score-chips">
+          <span class="score-chip">20% intermediate exams</span>
+          <span class="score-chip">30% homeworks</span>
+          <span class="score-chip">60% final phase exam</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 1: Phase 2 -->
+    <div class="panel" id="p1" style="--phase-col:var(--p2);--phase-col-a:rgba(124,106,240,.3);--phase-col-b:rgba(124,106,240,.08)">
+      <div class="phase-header">
+        <div class="phase-tag">Phase 2</div>
+        <h1 class="phase-title">Advanced Python<br><em>&amp; SQL</em></h1>
+        <div class="phase-meta">
+          <span class="pill">Applied Python</span>
+          <span class="pill">~3 months</span>
+          <span class="pill">Project exam</span>
+        </div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-n" id="s1-done">0</div><div class="stat-l">Topics completed</div></div>
+        <div class="stat-card"><div class="stat-n" id="s1-total">0</div><div class="stat-l">Total topics</div></div>
+        <div class="stat-card"><div class="stat-n" id="s1-pct">0%</div><div class="stat-l">Phase progress</div></div>
+      </div>
+      <div id="done1" class="done-banner" style="display:none"><div class="done-banner-icon">✓</div>Phase complete — ready for the exam!</div>
+      <div class="section">
+        <div class="section-head" onclick="toggleSec(this)">
+          <span class="section-name">Object-oriented programming</span>
+          <span class="section-toggle open">▾</span>
+        </div>
+        <div class="topics">
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">OO Analysis &amp; Design</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Special Methods &amp; Operator Overloading</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Inheritance &amp; Method Resolution</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Abstract Classes &amp; Interfaces</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Concurrency in Python (CPU &amp; GPU)</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Polymorphism</div></div>
+        </div>
+      </div>
+      <div class="mid-exam"><span class="mid-exam-dot"></span>Intermediate exam — Theory &amp; Coding (20% of phase score)</div>
+      <div class="section">
+        <div class="section-head" onclick="toggleSec(this)">
+          <span class="section-name">Data &amp; databases</span>
+          <span class="section-toggle open">▾</span>
+        </div>
+        <div class="topics">
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">NumPy &amp; Vectorization</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Pandas &amp; EDA</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Advanced GPU Architecture</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Database Management Systems</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">SQL with SQLite</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">SQLite Functions</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Views &amp; Triggers in SQLite</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Data Visualization &amp; EDA</div></div>
+        </div>
+      </div>
+      <div class="exam-card">
+        <div class="exam-top">
+          <div class="exam-icon"><svg viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="var(--p2)" stroke-width="1.2"/><line x1="4" y1="7" x2="12" y2="7" stroke="var(--p2)" stroke-width="1"/><line x1="4" y1="10" x2="9" y2="10" stroke="var(--p2)" stroke-width="1"/></svg></div>
+          <div><div class="exam-title">Phase exam — Project</div><div class="exam-type">End-to-end data project submission</div></div>
+        </div>
+        <div class="score-chips">
+          <span class="score-chip">30% intermediate exams</span>
+          <span class="score-chip">30% homeworks</span>
+          <span class="score-chip">40% final phase project</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 2: Phase 3 -->
+    <div class="panel" id="p2" style="--phase-col:var(--p3);--phase-col-a:rgba(62,207,178,.3);--phase-col-b:rgba(62,207,178,.08)">
+      <div class="phase-header">
+        <div class="phase-tag">Phase 3</div>
+        <h1 class="phase-title">Machine<br><em>Learning</em></h1>
+        <div class="phase-meta">
+          <span class="pill">Core ML</span>
+          <span class="pill">~4 months</span>
+          <span class="pill">Project + Article</span>
+        </div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-n" id="s2-done">0</div><div class="stat-l">Topics completed</div></div>
+        <div class="stat-card"><div class="stat-n" id="s2-total">0</div><div class="stat-l">Total topics</div></div>
+        <div class="stat-card"><div class="stat-n" id="s2-pct">0%</div><div class="stat-l">Phase progress</div></div>
+      </div>
+      <div id="done2" class="done-banner" style="display:none"><div class="done-banner-icon">✓</div>Phase complete — ready for the exam!</div>
+      <div class="section">
+        <div class="section-head" onclick="toggleSec(this)">
+          <span class="section-name">Classical algorithms</span>
+          <span class="section-toggle open">▾</span>
+        </div>
+        <div class="topics">
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Introduction to AI</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">k-Nearest Neighbors &amp; Data Splitting</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Decision Trees &amp; Overfitting</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Perceptron &amp; SVMs (Conceptual)</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Linear Regression</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Generalized Linear &amp; Polynomial Regression</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Regularization Techniques</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Metrics &amp; Bias–Variance Tradeoff</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Logistic Regression</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Optimization Algorithms</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Advanced Support Vector Machines</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Ensemble Methods</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Naïve Bayes &amp; Gaussian Discriminant Analysis</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Clustering — k-Means Family</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Gaussian Mixture Models &amp; EM</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Dimensionality Reduction &amp; Final Project</div></div>
+        </div>
+      </div>
+      <div class="exam-card">
+        <div class="exam-top">
+          <div class="exam-icon"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="var(--p3)" stroke-width="1.2"/><line x1="8" y1="4" x2="8" y2="8" stroke="var(--p3)" stroke-width="1.2" stroke-linecap="round"/><line x1="8" y1="8" x2="11" y2="10" stroke="var(--p3)" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+          <div><div class="exam-title">Phase exam — Project &amp; Article</div><div class="exam-type">ML project + written technical article</div></div>
+        </div>
+        <div class="score-chips">
+          <span class="score-chip">30% homeworks</span>
+          <span class="score-chip">60% final project + article</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 3: Phase 4 -->
+    <div class="panel" id="p3" style="--phase-col:var(--p4);--phase-col-a:rgba(240,160,75,.3);--phase-col-b:rgba(240,160,75,.08)">
+      <div class="phase-header">
+        <div class="phase-tag">Phase 4</div>
+        <h1 class="phase-title">Deep<br><em>Learning</em></h1>
+        <div class="phase-meta">
+          <span class="pill">Capstone</span>
+          <span class="pill">~5 months</span>
+          <span class="pill">Project + Interview</span>
+        </div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-n" id="s3-done">0</div><div class="stat-l">Topics completed</div></div>
+        <div class="stat-card"><div class="stat-n" id="s3-total">0</div><div class="stat-l">Total topics</div></div>
+        <div class="stat-card"><div class="stat-n" id="s3-pct">0%</div><div class="stat-l">Phase progress</div></div>
+      </div>
+      <div id="done3" class="done-banner" style="display:none"><div class="done-banner-icon">✓</div>Program complete — prepare for your final interview!</div>
+      <div class="section">
+        <div class="section-head" onclick="toggleSec(this)">
+          <span class="section-name">Neural architectures</span>
+          <span class="section-toggle open">▾</span>
+        </div>
+        <div class="topics">
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Neural Networks</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Backpropagation</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Convolutional Neural Networks</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">CNN Architectures</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Recurrent Neural Networks &amp; LSTM</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Attention &amp; Transformers</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Object Detection &amp; Image Segmentation</div></div>
+          <div class="topic" onclick="toggle(this)"><div class="topic-cb"><span class="topic-check">✓</span></div><div class="topic-text">Visualization Techniques</div></div>
+        </div>
+      </div>
+      <div class="exam-card">
+        <div class="exam-top">
+          <div class="exam-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2L10 6H14L11 9L12 13L8 11L4 13L5 9L2 6H6L8 2Z" stroke="var(--p4)" stroke-width="1.2" stroke-linejoin="round"/></svg></div>
+          <div><div class="exam-title">Phase exam — Project &amp; Interview</div><div class="exam-type">Capstone project defense + technical interview</div></div>
+        </div>
+        <div class="score-chips">
+          <span class="score-chip">Capstone project</span>
+          <span class="score-chip">Technical interview</span>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+var cur=0;
+function showPanel(i){
+  document.querySelectorAll('.panel').forEach(function(p,j){p.classList.toggle('active',j===i)});
+  document.querySelectorAll('.phase-btn').forEach(function(b,j){b.classList.toggle('active',j===i)});
+  cur=i;
+}
+function toggle(el){
+  el.classList.toggle('checked');
+  updateStats();
+}
+function toggleSec(head){
+  var topics=head.nextElementSibling;
+  var tog=head.querySelector('.section-toggle');
+  if(topics.style.display==='none'){topics.style.display='';tog.classList.add('open')}
+  else{topics.style.display='none';tog.classList.remove('open')}
+}
+function updateStats(){
+  var panels=document.querySelectorAll('.panel');
+  var gd=0,gt=0;
+  panels.forEach(function(panel,i){
+    var all=panel.querySelectorAll('.topic');
+    var done=panel.querySelectorAll('.topic.checked');
+    var t=all.length,d=done.length;
+    document.getElementById('s'+i+'-done').textContent=d;
+    document.getElementById('s'+i+'-total').textContent=t;
+    document.getElementById('s'+i+'-pct').textContent=t?Math.round(d/t*100)+'%':'0%';
+    var banner=document.getElementById('done'+i);
+    if(banner)banner.style.display=(d===t&&t>0)?'flex':'none';
+    var nb=document.getElementById('nb'+i);
+    if(nb)nb.classList.toggle('done',d===t&&t>0);
+    gd+=d;gt+=t;
+  });
+  var pct=gt?Math.round(gd/gt*100):0;
+  document.getElementById('gbar').style.width=pct+'%';
+  document.getElementById('gpct').textContent=gd+' / '+gt+' topics';
+}
+updateStats();
+</script>
