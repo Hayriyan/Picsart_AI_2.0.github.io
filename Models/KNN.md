@@ -1,4 +1,4 @@
-# K-Nearest Neighbors (KNN) — Deep Guide
+# K-Nearest Neighbors (KNN)
 
 ## Overview
 
